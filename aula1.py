@@ -13,7 +13,7 @@ class Functions():
   def db_connect(self):
     self.con = sqlite3.connect("clientes.db")
     self.cursor = self.con.cursor(); print("Conectando ao banco de dados...")
-  def db_desconnect(self):
+  def db_disconnect(self):
     self.con.close(); print("Desconectando ao banco de dados...")
   def create_tables(self):
     self.db_connect();
@@ -27,7 +27,28 @@ class Functions():
       );
     """)
     self.con.commit(); print("Banco de dados criado")
-    self.db_desconnect()
+    self.db_disconnect()
+  def add_client(self):
+    self.code = self.entry_code.get()
+    self.name = self.entry_client_name.get()
+    self.phone = self.entry_phone.get()
+    self.city = self.entry_city.get()
+    self.db_connect()
+
+    self.cursor.execute(""" INSERT INTO clientes (client_name, phone, city)
+                        VALUES (?, ?, ?)""", (self.name, self.phone, self.city))
+    self.con.commit()
+    self.db_disconnect()
+    self.select_list()
+    self.clear_entry()
+
+  def select_list(self):
+    self.client_list.delete(*self.client_list.get_children())
+    self.db_connect()
+    list = self.cursor.execute(""" SELECT cod, client_name, phone, city FROM clientes ORDER BY client_name ASC; """)
+    for i in list:
+      self.client_list.insert("", END, values=i)
+    self.db_disconnect()
 
 class Application(Functions):
 
@@ -38,6 +59,7 @@ class Application(Functions):
     self.widgets_frame1()
     self.frame2_list()
     self.create_tables()
+    self.select_list()
     window.mainloop()
 
   def display(self):
@@ -62,7 +84,7 @@ class Application(Functions):
     self.bt_search = Button(self.frame_1, text="Buscar")
     self.bt_search.place(relx=0.3, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão novo
-    self.bt_new = Button(self.frame_1, text="Novo")
+    self.bt_new = Button(self.frame_1, text="Novo", command=self.add_client)
     self.bt_new.place(relx=0.5, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão alterar
     self.bt_change = Button(self.frame_1, text="Alterar")
@@ -84,14 +106,12 @@ class Application(Functions):
     # Criação da entrada do nome do cliente
     self.entry_client_name = Entry(self.frame_1)
     self.entry_client_name.place(relx=0.05, rely=0.46, relwidth=0.80, relheight=0.09)
-
     # Criação da label do telefone
     self.lb_phone = Label(self.frame_1, text = 'Telefone', bg='#dfe3ee')
     self.lb_phone.place(relx=0.05, rely=0.60)
     # Criação da entrada do telefone
     self.entry_phone = Entry(self.frame_1)
     self.entry_phone.place(relx=0.05, rely=0.70, relwidth=0.35, relheight=0.09)
-
      # Criação da label doa cidade
     self.lb_city = Label(self.frame_1, text = 'Cidade', bg='#dfe3ee')
     self.lb_city.place(relx=0.5, rely=0.60)
