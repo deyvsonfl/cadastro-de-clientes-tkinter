@@ -62,11 +62,20 @@ class Functions():
   def client_delete(self):
     self.variables()
     self.db_connect()
-    self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.code))
+    self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.code,))
     self.con.commit()
     self.db_disconnect()
     self.clear_entry()
     self.select_list()
+  def client_change(self):
+    self.variables()
+    self.db_connect()
+    self.cursor.execute(""" UPDATE clientes SET client_name = ?, phone = ?, city = ?
+                        WHERE cod = ? """, (self.name, self.phone, self.city, self.code))
+    self.con.commit()
+    self.db_disconnect()
+    self.select_list()
+    self.clear_entry()
 
 class Application(Functions):
   def __init__(self):
@@ -101,7 +110,7 @@ class Application(Functions):
     self.bt_new = Button(self.frame_1, text="Novo", command=self.add_client)
     self.bt_new.place(relx=0.5, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão alterar
-    self.bt_change = Button(self.frame_1, text="Alterar")
+    self.bt_change = Button(self.frame_1, text="Alterar", command=self.client_change)
     self.bt_change.place(relx=0.6, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão apagar
     self.bt_erase = Button(self.frame_1, text="Apagar", command=self.client_delete)
