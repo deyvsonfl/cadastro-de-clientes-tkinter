@@ -116,6 +116,18 @@ class Functions():
     self.db_disconnect()
     self.select_list()
     self.clear_entry()
+  def client_search(self):
+    self.db_connect()
+    self.client_list.delete(*self.client_list.get_children())
+
+    self.entry_client_name.insert(END, '%')
+    name = self.entry_client_name.get()
+    self.cursor.execute(""" SELECT cod, client_name, phone, city FROM clientes WHERE client_name LIKE '%s' ORDER BY client_name ASC""" % name)
+    searchClientName = self.cursor.fetchall()
+    for i in searchClientName:
+      self.client_list.insert("", END, values=i)
+      self.clear_entry()
+    self.db_disconnect()
 
 class Application(Functions, Reports):
   def __init__(self):
@@ -145,7 +157,7 @@ class Application(Functions, Reports):
     self.bt_clear = Button(self.frame_1, text="Limpar", command= self.clear_entry)
     self.bt_clear.place(relx=0.2, rely=0.1, relwidth=0.09, relheight=0.13)
     # Criação do botão buscar
-    self.bt_search = Button(self.frame_1, text="Buscar")
+    self.bt_search = Button(self.frame_1, text="Buscar", command=self.client_search)
     self.bt_search.place(relx=0.3, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão novo
     self.bt_new = Button(self.frame_1, text="Novo", command=self.add_client)
