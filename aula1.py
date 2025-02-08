@@ -43,28 +43,28 @@ class Application():
     self.bt_erase.place(relx=0.7, rely=0.1, relwidth=0.09, relheight=0.13)
 
     # Criação da label do código
-    self.lb_code = Label(self.frame_1, text = 'Código')
+    self.lb_code = Label(self.frame_1, text = 'Código', bg='#dfe3ee')
     self.lb_code.place(relx=0.05, rely=0.06)
     # Criação da entrada do código
     self.entry_code = Entry(self.frame_1)
     self.entry_code.place(relx=0.05, rely=0.16, relwidth=0.09, relheight=0.09)
 
     # Criação da label do nome do cliente
-    self.lb_client_name = Label(self.frame_1, text = 'Nome do cliente')
+    self.lb_client_name = Label(self.frame_1, text = 'Nome do cliente', bg='#dfe3ee')
     self.lb_client_name.place(relx=0.05, rely=0.36)
     # Criação da entrada do nome do cliente
     self.entry_client_name = Entry(self.frame_1)
     self.entry_client_name.place(relx=0.05, rely=0.46, relwidth=0.80, relheight=0.09)
 
     # Criação da label do telefone
-    self.lb_phone = Label(self.frame_1, text = 'Telefone')
+    self.lb_phone = Label(self.frame_1, text = 'Telefone', bg='#dfe3ee')
     self.lb_phone.place(relx=0.05, rely=0.60)
     # Criação da entrada do telefone
     self.entry_phone = Entry(self.frame_1)
     self.entry_phone.place(relx=0.05, rely=0.70, relwidth=0.35, relheight=0.09)
 
      # Criação da label doa cidade
-    self.lb_city = Label(self.frame_1, text = 'Cidade')
+    self.lb_city = Label(self.frame_1, text = 'Cidade', bg='#dfe3ee')
     self.lb_city.place(relx=0.5, rely=0.60)
     # Criação da entrada do telefone
     self.entry_city = Entry(self.frame_1)
