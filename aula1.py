@@ -28,20 +28,20 @@ class Functions():
     """)
     self.con.commit(); print("Banco de dados criado")
     self.db_disconnect()
-  def add_client(self):
+  def variables(self):
     self.code = self.entry_code.get()
     self.name = self.entry_client_name.get()
     self.phone = self.entry_phone.get()
     self.city = self.entry_city.get()
+  def add_client(self):
     self.db_connect()
-
+    self.variables()
     self.cursor.execute(""" INSERT INTO clientes (client_name, phone, city)
                         VALUES (?, ?, ?)""", (self.name, self.phone, self.city))
     self.con.commit()
     self.db_disconnect()
     self.select_list()
     self.clear_entry()
-
   def select_list(self):
     self.client_list.delete(*self.client_list.get_children())
     self.db_connect()
@@ -49,9 +49,26 @@ class Functions():
     for i in list:
       self.client_list.insert("", END, values=i)
     self.db_disconnect()
+  def OnDoubleClick(self, event):
+    self.clear_entry()
+    self.client_list.selection()
+
+    for n in self.client_list.selection():
+      col1, col2, col3, col4 = self.client_list.item(n, 'values')
+      self.entry_code.insert(END, col1)
+      self.entry_client_name.insert(END, col2)
+      self.entry_phone.insert(END, col3)
+      self.entry_city.insert(END, col4)
+  def client_delete(self):
+    self.variables()
+    self.db_connect()
+    self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.code))
+    self.con.commit()
+    self.db_disconnect()
+    self.clear_entry()
+    self.select_list()
 
 class Application(Functions):
-
   def __init__(self):
     self.window = window
     self.display()
@@ -61,21 +78,18 @@ class Application(Functions):
     self.create_tables()
     self.select_list()
     window.mainloop()
-
   def display(self):
     self.window.title("Cadastro de Clientes")
     self.window.configure(background= '#fdfdfd')
     self.window.wm_maxsize(1280, 1080)
     self.window.wm_minsize(788, 588)
     self.window.resizable(True, True)
-
   def display_frames(self):
     self.frame_1 = Frame(self.window, bd=4, bg='#dfe3ee', highlightbackground='#759fe6', highlightthickness=3)
     self.frame_1.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.46)
 
     self.frame_2 = Frame(self.window, bd=4, bg='#dfe3ee', highlightbackground='#759fe6', highlightthickness=3)
     self.frame_2.place(relx=0.02, rely=0.5, relwidth=0.96, relheight=0.46)
-
   def widgets_frame1(self):
     # Criação do botão limpar
     self.bt_clear = Button(self.frame_1, text="Limpar", command= self.clear_entry)
@@ -90,7 +104,7 @@ class Application(Functions):
     self.bt_change = Button(self.frame_1, text="Alterar")
     self.bt_change.place(relx=0.6, rely=0.1, relwidth=0.09, relheight=0.13)
      # Criação do botão apagar
-    self.bt_erase = Button(self.frame_1, text="Apagar")
+    self.bt_erase = Button(self.frame_1, text="Apagar", command=self.client_delete)
     self.bt_erase.place(relx=0.7, rely=0.1, relwidth=0.09, relheight=0.13)
 
     # Criação da label do código
@@ -118,7 +132,6 @@ class Application(Functions):
     # Criação da entrada do telefone
     self.entry_city = Entry(self.frame_1)
     self.entry_city.place(relx=0.5, rely=0.70, relwidth=0.35, relheight=0.09)
-
   def frame2_list(self):
     self.client_list = ttk.Treeview(self.frame_2, height=3, columns=("col1", "col2", 'col3', 'col4'))
     self.client_list.heading("#0", text="")
@@ -138,5 +151,6 @@ class Application(Functions):
     self.scrollList = Scrollbar(self.frame_2, orient='vertical')
     self.client_list.configure(yscrollcommand=self.scrollList.set)
     self.scrollList.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
+    self.client_list.bind("<Double-1>", self.OnDoubleClick)
 
 Application()
