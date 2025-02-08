@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter import ttk
+
 
 window = Tk()
 
@@ -9,6 +11,7 @@ class Application():
     self.display()
     self.display_frames()
     self.widgets_frame1()
+    self.frame2_list()
     window.mainloop()
 
   def display(self):
@@ -69,5 +72,25 @@ class Application():
     # Criação da entrada do telefone
     self.entry_city = Entry(self.frame_1)
     self.entry_city.place(relx=0.5, rely=0.70, relwidth=0.35, relheight=0.09)
+
+  def frame2_list(self):
+    self.client_list = ttk.Treeview(self.frame_2, height=3, columns=("col1", "col2", 'col3', 'col4'))
+    self.client_list.heading("#0", text="")
+    self.client_list.heading("#1", text="Código")
+    self.client_list.heading("#2", text="Nome")
+    self.client_list.heading("#3", text="Telefone")
+    self.client_list.heading("#4", text="Cidade")
+
+    self.client_list.column("#0", width=1, stretch=NO)
+    self.client_list.column("#1", width=50)
+    self.client_list.column("#2", width=200)
+    self.client_list.column("#3", width=125)
+    self.client_list.column("#4", width=125)
+
+    self.client_list.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
+
+    self.scrollList = Scrollbar(self.frame_2, orient='vertical')
+    self.client_list.configure(yscrollcommand=self.scrollList.set)
+    self.scrollList.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
 
 Application()
