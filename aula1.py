@@ -86,6 +86,7 @@ class Application(Functions):
     self.frame2_list()
     self.create_tables()
     self.select_list()
+    self.menus()
     window.mainloop()
   def display(self):
     self.window.title("Cadastro de Clientes")
@@ -161,5 +162,17 @@ class Application(Functions):
     self.client_list.configure(yscrollcommand=self.scrollList.set)
     self.scrollList.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
     self.client_list.bind("<Double-1>", self.OnDoubleClick)
+  def menus(self):
+    menubar = Menu(self.window)
+    self.window.config(menu=menubar)
+    filemenu = Menu(menubar)
+    filemenu2 = Menu(menubar)
 
+    def Quit(): self.window.destroy()
+
+    menubar.add_cascade(label="Opções", menu=filemenu)
+    menubar.add_cascade(label="Sobre", menu=filemenu2)
+
+    filemenu.add_command(label="Sair", command=Quit)
+    filemenu2.add_command(label="Limpa Cliente", command=self.clear_entry)
 Application()
