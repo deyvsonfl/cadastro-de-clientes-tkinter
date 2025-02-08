@@ -1,8 +1,48 @@
 from tkinter import *
 from tkinter import ttk
+
 import sqlite3
 
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import SimpleDocTemplate, Image
+import webbrowser
+
 window = Tk()
+
+class Reports():
+  def printClient(self):
+    webbrowser.open("cliente.pdf")
+  def generateReport(self):
+    self.c = canvas.Canvas("cliente.pdf")
+
+    self.reportCode = self.entry_code.get()
+    self.reportName = self.entry_client_name.get()
+    self.reportPhone = self.entry_phone.get()
+    self.reportCity = self.entry_city.get()
+
+    self.c.setFont("Helvetica-Bold", 24)
+    self.c.drawString(200, 790, 'Ficha do Cliente')
+
+    self.c.setFont("Helvetica-Bold", 18)
+    self.c.drawString(50, 700, 'Código: ')
+    self.c.drawString(50, 670, 'Nome: ')
+    self.c.drawString(50, 640, 'Telefone: ')
+    self.c.drawString(50, 610, 'Cidade: ')
+
+    self.c.setFont("Helvetica", 18)
+    self.c.drawString(150, 700, self.reportCode)
+    self.c.drawString(150, 670, self.reportName)
+    self.c.drawString(150, 640, self.reportPhone)
+    self.c.drawString(150, 610, self.reportCity)
+
+    #self.c.rect(20, 720, 550, 200, fill=False, stroke=True)
+
+    self.c.showPage()
+    self.c.save()
+    self.printClient()
 
 class Functions():
   def clear_entry(self):
@@ -77,7 +117,7 @@ class Functions():
     self.select_list()
     self.clear_entry()
 
-class Application(Functions):
+class Application(Functions, Reports):
   def __init__(self):
     self.window = window
     self.display()
@@ -171,8 +211,11 @@ class Application(Functions):
     def Quit(): self.window.destroy()
 
     menubar.add_cascade(label="Opções", menu=filemenu)
-    menubar.add_cascade(label="Sobre", menu=filemenu2)
+    menubar.add_cascade(label="Relatórios", menu=filemenu2)
 
     filemenu.add_command(label="Sair", command=Quit)
-    filemenu2.add_command(label="Limpa Cliente", command=self.clear_entry)
+    filemenu.add_command(label="Limpa Cliente", command=self.clear_entry)
+
+    filemenu2.add_command(label="Ficha do Cliente", command=self.generateReport)
+
 Application()
