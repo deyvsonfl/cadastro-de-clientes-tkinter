@@ -165,8 +165,8 @@ class Application(Functions):
   def menus(self):
     menubar = Menu(self.window)
     self.window.config(menu=menubar)
-    filemenu = Menu(menubar)
-    filemenu2 = Menu(menubar)
+    filemenu = Menu(menubar, tearoff=0)
+    filemenu2 = Menu(menubar, tearoff=0)
 
     def Quit(): self.window.destroy()
 
