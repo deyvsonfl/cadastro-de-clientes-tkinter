@@ -4,7 +4,14 @@ from tkinter import ttk
 
 window = Tk()
 
-class Application():
+class Functions():
+  def clear_entry(self):
+    self.entry_code.delete(0, END)
+    self.entry_client_name.delete(0, END)
+    self.entry_phone.delete(0, END)
+    self.entry_city.delete(0, END)
+
+class Application(Functions):
 
   def __init__(self):
     self.window = window
@@ -30,7 +37,7 @@ class Application():
 
   def widgets_frame1(self):
     # Criação do botão limpar
-    self.bt_clear = Button(self.frame_1, text="Limpar")
+    self.bt_clear = Button(self.frame_1, text="Limpar", command= self.clear_entry)
     self.bt_clear.place(relx=0.2, rely=0.1, relwidth=0.09, relheight=0.13)
     # Criação do botão buscar
     self.bt_search = Button(self.frame_1, text="Buscar")
